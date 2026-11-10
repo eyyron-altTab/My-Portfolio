@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aaron — Web Developer &amp; Designer Portfolio</title>
+  
+  <!-- Google Fonts: Inter & Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,600&display=swap" rel="stylesheet" />
+  
+  <!-- Font Awesome 6.5.1 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Interactive Cursor Glow -->
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <!-- HERO WRAPPER -->
+  <header class="hero-wrapper">
+    <!-- Interactive Particle Canvas Background -->
+    <canvas id="hero-particles" class="hero-canvas"></canvas>
+    
+    <!-- Ambient Gradient Spheres -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <div class="ambient-glow glow-3"></div>
+
+    <!-- Top Bar -->
+    <nav class="topbar">
+      <a href="#home" class="brand-logo">Aaron<span class="logo-dot">.</span></a>
+
+      <div class="topbar-right">
+        <a href="#contact" class="pill-btn">
+          <span>Let's Talk</span>
+          <span class="pill-icon"><i class="fas fa-phone"></i></span>
+        </a>
+        <a href="#about" class="pill-btn resume-btn">
+          <span>My Story</span>
+          <span class="pill-icon"><i class="fas fa-arrow-down"></i></span>
+        </a>
+        <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
+          <i class="fas fa-moon" id="darkModeIcon"></i>
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="Toggle Navigation Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Mobile Nav Drawer -->
+    <ul class="mobile-nav" id="mobileNav">
+      <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="#about"><i class="fas fa-user"></i> My Story</a></li>
+      <li><a href="#skills"><i class="fas fa-code"></i> Skills</a></li>
+      <li><a href="#projects"><i class="fas fa-laptop-code"></i> Projects</a></li>
+      <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
+      <li><a href="admin.html"><i class="fas fa-lock"></i> Admin Panel</a></li>
+    </ul>
+
+    <!-- Hero Content -->
+    <section class="hero" id="home">
+      <div class="hero-badge fade-in-up">
+        <span class="badge-dot"></span> Available for New Opportunities
+      </div>
+
+      <h1 class="hero-headline fade-in-up">Designing<br /><span class="gradient-headline">Digital Products</span></h1>
+
+      <!-- Aaron's Portrait Container -->
+      <div class="hero-photo-wrapper">
+        <div class="hero-photo-backdrop"></div>
+        <div class="hero-photo">
+          <img src="avatar.png" alt="Aaron - Web Developer &amp; Designer" class="hero-avatar" />
+        </div>
+      </div>
+
+      <!-- Hero Bottom Floating Glass Cards -->
+      <div class="hero-bottom">
+        <!-- Left Glass Card -->
+        <div class="hero-card hero-card-left">
+          <span class="corner-plus tl">+</span>
+          <span class="corner-plus tr">+</span>
+          <span class="corner-plus bl">+</span>
+          <span class="corner-plus br">+</span>
+          <div class="card-glow-pill"></div>
+          <p class="hero-card-text">
+            Hey, I am <strong>Aaron</strong>. I help businesses turn complex ideas into simple, intuitive digital experiences with modern code &amp; craft.
+          </p>
+          <a href="#contact" class="talk-btn">
+            <span>Let's Talk Now</span>
+            <span class="talk-btn-icon"><i class="fas fa-arrow-right"></i></span>
+          </a>
+        </div>
+
+        <!-- Right Glass Card -->
+        <div class="hero-card hero-card-right">
+          <span class="corner-plus tl">+</span>
+          <span class="corner-plus tr">+</span>
+          <span class="corner-plus bl">+</span>
+          <span class="corner-plus br">+</span>
+          <div class="card-glow-pill"></div>
+          <p class="hero-card-text">
+            This portfolio showcases my journey as a Web Developer &amp; Designer that reflects my relentless passion for high-performance design.
+          </p>
+          <div class="hero-socials">
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="https://behance.net" target="_blank" rel="noopener noreferrer" aria-label="Behance"><i class="fab fa-behance"></i></a>
+            <a href="https://dribbble.com" target="_blank" rel="noopener noreferrer" aria-label="Dribbble"><i class="fab fa-dribbble"></i></a>
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hero Curved Bottom SVG Divider -->
+    <div class="hero-wave-divider">
+      <svg viewBox="0 0 1440 120" fill="none" preserveAspectRatio="none">
+        <path d="M0,32L60,42.7C120,53,240,75,360,74.7C480,75,600,53,720,42.7C840,32,960,32,1080,42.7C1200,53,1320,75,1380,85.3L1440,96L1440,120L1380,120C1320,120,1200,120,1080,120C960,120,840,120,720,120C600,120,480,120,360,120C240,120,120,120,60,120L0,120Z" fill="#f8fafc"></path>
+      </svg>
+    </div>
+  </header>
+
+  <!-- SECTION NAV BAR (Sticky & Scroll-Spy) -->
+  <nav class="section-nav" id="sectionNav">
+    <div class="section-nav-inner">
+      <a href="#about" class="section-nav-item" data-section="about">
+        <span class="nav-plus">+</span> My Story
+      </a>
+      <a href="#skills" class="section-nav-item" data-section="skills">
+        <span class="nav-plus">+</span> My Path To Mastery In Web Development
+      </a>
+      <a href="#projects" class="section-nav-item" data-section="projects">
+        <span class="nav-plus">+</span> Selected Works
+      </a>
+    </div>
+  </nav>
+
+  <!-- ABOUT / MY STORY -->
+  <section class="section about-section" id="about">
+    <div class="container">
+      <div class="section-heading-wrap scroll-reveal">
+        <span class="section-label">My Story</span>
+        <h2 class="section-title">Passion Turned Into Purpose</h2>
+        <p class="section-subtitle">A blend of creative design thinking and modern web engineering</p>
+      </div>
+
+      <div class="about-grid">
+        <!-- Story Text & Aaron Photo Showcase -->
+        <div class="about-story-row scroll-reveal">
+          <div class="about-photo-card">
+            <div class="about-photo-frame">
+              <img src="about-photo.png" alt="Aaron working" class="about-image" />
+            </div>
+            <div class="about-photo-badge">
+              <i class="fas fa-sparkles"></i>
+              <span>Crafting Digital Products</span>
+            </div>
+          </div>
+
+          <div class="about-text-content">
+            <p class="about-text highlight-lead">
+              Over the years, I've worked with startups, agencies, and product teams to improve usability, increase engagement, and simplify digital experiences across web applications and mobile platforms.
+            </p>
+            <p class="about-text">
+              I'm a passionate web developer who loves turning ideas into beautiful, functional websites. I enjoy solving complex problems, writing clean semantic code, and continuously learning new technologies to stay ahead of the curve.
+            </p>
+            <div class="about-highlights">
+              <div class="highlight-item">
+                <i class="fas fa-check-circle"></i>
+                <span>Pixel-Perfect Design Precision</span>
+              </div>
+              <div class="highlight-item">
+                <i class="fas fa-check-circle"></i>
+                <span>Responsive &amp; Accessible Interfaces</span>
+              </div>
+              <div class="highlight-item">
+                <i class="fas fa-check-circle"></i>
+                <span>Performance-Driven Web Architecture</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 Stat / Role Glass Cards -->
+        <div class="about-cards">
+          <div class="about-stat-card scroll-reveal">
+            <div class="stat-icon-wrapper dev-icon">
+              <i class="fas fa-laptop-code"></i>
+            </div>
+            <h3>Developer</h3>
+            <p>Building clean, scalable, and modern web applications with the latest front-end standards and reactive frameworks.</p>
+          </div>
+
+          <div class="about-stat-card scroll-reveal">
+            <div class="stat-icon-wrapper design-icon">
+              <i class="fas fa-paint-brush"></i>
+            </div>
+            <h3>Designer</h3>
+            <p>Crafting intuitive user interfaces, engaging interactions, and delightful experiences with attention to every pixel.</p>
+          </div>
+
+          <div class="about-stat-card scroll-reveal">
+            <div class="stat-icon-wrapper learn-icon">
+              <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h3>Learner</h3>
+            <p>Continuously exploring emerging web technologies, optimizing workflows, and mastering tomorrow's tools today.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WAVE DIVIDER -->
+  <div class="section-divider divider-to-alt">
+    <svg viewBox="0 0 1440 80" fill="none" preserveAspectRatio="none">
+      <path d="M0,32L80,37.3C160,43,320,53,480,48C640,43,800,21,960,16C1120,11,1280,21,1360,26.7L1440,32L1440,80L1360,80C1280,80,1120,80,960,80C800,80,640,80,480,80C320,80,160,80,80,80L0,80Z" fill="#edf2f7"></path>
+    </svg>
+  </div>
+
+  <!-- SKILLS SECTION -->
+  <section class="section section-alt skills-section" id="skills">
+    <div class="container">
+      <div class="section-heading-wrap scroll-reveal">
+        <span class="section-label">Skills</span>
+        <h2 class="section-title">My Path To Mastery</h2>
+        <p class="section-subtitle">Technologies, frameworks &amp; creative tools I work with daily</p>
+      </div>
+
+      <!-- Skills Grid Container (Dynamically rendered/hydrated from localStorage or defaults) -->
+      <div class="skills-grid" id="skillsGrid">
+        <!-- Rendered by script.js with data from localStorage or fallback defaults -->
+      </div>
+    </div>
+  </section>
+
+  <!-- WAVE DIVIDER -->
+  <div class="section-divider divider-to-white">
+    <svg viewBox="0 0 1440 80" fill="none" preserveAspectRatio="none">
+      <path d="M0,48L80,42.7C160,37,320,27,480,32C640,37,800,59,960,64C1120,69,1280,59,1360,53.3L1440,48L1440,80L1360,80C1280,80,1120,80,960,80C800,80,640,80,480,80C320,80,160,80,80,80L0,80Z" fill="#ffffff"></path>
+    </svg>
+  </div>
+
+  <!-- PROJECTS / SELECTED WORKS -->
+  <section class="section projects-section" id="projects">
+    <div class="container">
+      <div class="section-heading-wrap scroll-reveal">
+        <span class="section-label">Selected Works</span>
+        <h2 class="section-title">Featured Projects</h2>
+        <p class="section-subtitle">Real-world applications built with clean code and modern aesthetics</p>
+      </div>
+
+      <div class="projects-grid">
+        <!-- Rendered dynamically by script.js from localStorage or defaults -->
+      </div>
+    </div>
+  </section>
+
+  <!-- WAVE DIVIDER -->
+  <div class="section-divider divider-to-alt">
+    <svg viewBox="0 0 1440 80" fill="none" preserveAspectRatio="none">
+      <path d="M0,20L80,32C160,44,320,68,480,64C640,60,800,28,960,20C1120,12,1280,28,1360,36L1440,44L1440,80L1360,80C1280,80,1120,80,960,80C800,80,640,80,480,80C320,80,160,80,80,80L0,80Z" fill="#edf2f7"></path>
+    </svg>
+  </div>
+
+  <!-- CONTACT SECTION -->
+  <section class="section section-alt contact-section" id="contact">
+    <div class="container">
+      <div class="section-heading-wrap scroll-reveal">
+        <span class="section-label">Contact</span>
+        <h2 class="section-title">Get In Touch</h2>
+        <p class="section-subtitle">Let's build something exceptional together</p>
+      </div>
+
+      <div class="contact-card-container scroll-reveal">
+        <div class="contact-info-grid">
+          <div class="contact-info-pill">
+            <div class="info-pill-icon"><i class="fas fa-envelope-open-text"></i></div>
+            <div>
+              <span class="pill-title">Email</span>
+              <p>aaron.dev@example.com</p>
+            </div>
+          </div>
+          <div class="contact-info-pill">
+            <div class="info-pill-icon"><i class="fas fa-map-marker-alt"></i></div>
+            <div>
+              <span class="pill-title">Location</span>
+              <p>Available Worldwide / Remote</p>
+            </div>
+          </div>
+          <div class="contact-info-pill">
+            <div class="info-pill-icon"><i class="fas fa-clock"></i></div>
+            <div>
+              <span class="pill-title">Response Time</span>
+              <p>Within 24 Hours</p>
+            </div>
+          </div>
+        </div>
+
+        <form class="contact-form" id="contactForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="contactName">Your Name</label>
+              <div class="input-wrapper">
+                <i class="fas fa-user input-icon"></i>
+                <input type="text" id="contactName" placeholder="e.g. John Doe" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="contactEmail">Your Email</label>
+              <div class="input-wrapper">
+                <i class="fas fa-envelope input-icon"></i>
+                <input type="email" id="contactEmail" placeholder="e.g. john@example.com" required />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="contactSubject">Subject</label>
+            <div class="input-wrapper">
+              <i class="fas fa-tag input-icon"></i>
+              <input type="text" id="contactSubject" placeholder="Project Inquiry / Consultation" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="contactMessage">Your Message</label>
+            <div class="input-wrapper textarea-wrapper">
+              <textarea id="contactMessage" rows="5" placeholder="Tell me about your project goals, timelines, and budget..." required></textarea>
+            </div>
+          </div>
+
+          <div class="form-footer">
+            <button type="submit" class="btn btn-primary btn-lg" id="contactSubmitBtn">
+              <i class="fas fa-paper-plane"></i> Send Message
+            </button>
+            <span class="form-status" id="formStatus"></span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <a href="#home" class="footer-logo">Aaron<span>.</span></a>
+        <p class="footer-bio">Turning vision into interactive digital reality.</p>
+      </div>
+
+      <div class="footer-socials">
+        <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i></a>
+        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="https://behance.net" target="_blank" rel="noopener noreferrer" aria-label="Behance"><i class="fab fa-behance"></i></a>
+        <a href="https://dribbble.com" target="_blank" rel="noopener noreferrer" aria-label="Dribbble"><i class="fab fa-dribbble"></i></a>
+      </div>
+
+      <div class="footer-bottom-meta">
+        <p>&copy; 2026 Aaron. All rights reserved.</p>
+        <!-- Subtle Admin Portal Link -->
+        <a href="admin.html" class="admin-portal-link" title="Skills Admin Management">
+          <i class="fas fa-lock"></i> Admin
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll-to-top button -->
+  <button class="scroll-top" id="scrollTop" aria-label="Scroll back to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <script src="script.js"></script>
+</body>
+</html>
