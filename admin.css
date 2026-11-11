@@ -679,12 +679,34 @@ input {
   place-items: center;
   color: var(--cyan-accent);
   font-size: 1.5rem;
+  transition: all var(--transition);
+  flex-shrink: 0;
+}
+
+.skill-title-wrap {
+  display: flex;
+  flex-direction: column;
 }
 
 .skill-meta-title {
   font-size: 1.15rem;
   font-weight: 700;
   color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.skill-meta-sub {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.skill-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .skill-value-badge {
@@ -699,9 +721,111 @@ input {
   letter-spacing: -0.5px;
 }
 
+.delete-skill-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: rgba(244, 63, 94, 0.1);
+  border: 1px solid rgba(244, 63, 94, 0.2);
+  color: var(--rose-accent);
+  display: grid;
+  place-items: center;
+  font-size: 0.92rem;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.delete-skill-btn:hover {
+  background: rgba(244, 63, 94, 0.25);
+  border-color: rgba(244, 63, 94, 0.5);
+  transform: scale(1.08);
+  box-shadow: 0 0 16px rgba(244, 63, 94, 0.3);
+}
+
+/* Skill Editable Fields (Name & Icon) */
+.skill-edit-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 20px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.skill-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.skill-field label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.skill-field-hint {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.skill-field-hint code {
+  color: var(--cyan-accent);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 0.7rem;
+}
+
+.skill-input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: rgba(15, 23, 42, 0.85);
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  font-size: 0.92rem;
+  font-family: inherit;
+  outline: none;
+  transition: all var(--transition);
+}
+
+.skill-input:focus {
+  border-color: var(--violet-accent);
+  background: rgba(15, 23, 42, 1);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+}
+
+.skill-input::placeholder {
+  color: var(--text-muted);
+}
+
 /* Slider Section */
 .slider-container {
   margin-bottom: 18px;
+}
+
+.slider-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.slider-label-row label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.slider-hint {
+  font-size: 0.74rem;
+  color: var(--text-muted);
 }
 
 .slider-controls-row {
@@ -819,6 +943,47 @@ input[type="range"].skill-range-slider::-moz-range-thumb {
 @keyframes adminShimmer {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
+}
+
+/* Empty State for Skills */
+.empty-skills-state {
+  grid-column: 1 / -1;
+  background: var(--gradient-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 2px dashed rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-md);
+  padding: 48px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.empty-skills-state .empty-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-md);
+  background: rgba(124, 58, 237, 0.15);
+  color: var(--cyan-accent);
+  display: grid;
+  place-items: center;
+  font-size: 1.8rem;
+  margin-bottom: 4px;
+}
+
+.empty-skills-state h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.empty-skills-state p {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  max-width: 480px;
+  line-height: 1.5;
 }
 
 /* ─── STICKY BOTTOM SAVE BAR ─── */
@@ -1283,6 +1448,7 @@ input[type="range"].skill-range-slider::-moz-range-thumb {
 }
 
 @media (max-width: 600px) {
+  .skill-edit-fields,
   .project-edit-fields {
     grid-template-columns: 1fr;
   }

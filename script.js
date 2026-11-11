@@ -71,9 +71,9 @@ function initDarkMode() {
 function getSkillsData() {
   try {
     const stored = localStorage.getItem('portfolioSkills');
-    if (stored) {
+    if (stored !== null) {
       const parsed = JSON.parse(stored);
-      if (Array.isArray(parsed) && parsed.length > 0) {
+      if (Array.isArray(parsed)) {
         return parsed;
       }
     }
@@ -90,19 +90,30 @@ function initSkills() {
   const skills = getSkillsData();
   container.innerHTML = '';
 
+  if (skills.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 48px 20px; color: var(--text-muted, #718096);">
+        <i class="fas fa-layer-group" style="font-size: 2.2rem; margin-bottom: 12px; opacity: 0.5; display: block;"></i>
+        <p style="font-size: 1.05rem; font-weight: 600; margin-bottom: 6px;">No Skills Configured Yet</p>
+        <p style="font-size: 0.88rem;">Add your skills in the <a href="admin.html" style="color: var(--primary-color, #2563eb); text-decoration: underline;">Admin Portal</a>.</p>
+      </div>
+    `;
+    return;
+  }
+
   skills.forEach(skill => {
     const card = document.createElement('div');
     card.className = 'skill-card scroll-reveal';
     card.innerHTML = `
       <div class="skill-top">
         <div class="skill-icon-wrap">
-          <i class="${escapeHtml(skill.icon)}"></i>
+          <i class="${escapeHtml(skill.icon || 'fas fa-code')}"></i>
         </div>
-        <span class="skill-percent-badge">${Number(skill.percent)}%</span>
+        <span class="skill-percent-badge">${Number(skill.percent) || 0}%</span>
       </div>
-      <h4>${escapeHtml(skill.name)}</h4>
+      <h4>${escapeHtml(skill.name || 'Skill')}</h4>
       <div class="progress-bar">
-        <div class="progress-fill" data-percent="${Number(skill.percent)}"></div>
+        <div class="progress-fill" data-percent="${Number(skill.percent) || 0}"></div>
       </div>
     `;
     container.appendChild(card);

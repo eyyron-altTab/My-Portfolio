@@ -170,18 +170,14 @@ function initPasswordToggle() {
 function loadSkills() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
+    if (raw !== null) {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        // Merge with defaults to ensure icons/names stay preserved
-        currentSkills = DEFAULT_SKILLS.map(def => {
-          const found = parsed.find(p => p.name.toLowerCase() === def.name.toLowerCase());
-          return {
-            name: def.name,
-            icon: def.icon,
-            percent: found ? Math.min(100, Math.max(0, Number(found.percent) || 0)) : def.percent
-          };
-        });
+      if (Array.isArray(parsed)) {
+        currentSkills = parsed.map(s => ({
+          name: s.name ? String(s.name) : 'Unnamed Skill',
+          icon: s.icon ? String(s.icon) : 'fas fa-code',
+          percent: Math.min(100, Math.max(0, Number(s.percent) || 0))
+        }));
       } else {
         currentSkills = JSON.parse(JSON.stringify(DEFAULT_SKILLS));
       }
@@ -206,6 +202,29 @@ function renderSkillsEditor() {
 
   grid.innerHTML = '';
 
+  if (currentSkills.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-skills-state">
+        <div class="empty-icon"><i class="fas fa-layer-group"></i></div>
+        <h3>No Skills Configured</h3>
+        <p>You have removed all skills. Click "Add Skill" above to create one, or "Reset to Defaults" to restore the starter skills.</p>
+        <button type="button" class="admin-btn admin-btn-accent" id="emptyAddSkillBtn">
+          <i class="fas fa-plus"></i>
+          <span>Add Your First Skill</span>
+        </button>
+      </div>
+    `;
+
+    const emptyAddBtn = document.getElementById('emptyAddSkillBtn');
+    if (emptyAddBtn) {
+      emptyAddBtn.addEventListener('click', () => {
+        const addBtn = document.getElementById('addSkillBtn');
+        if (addBtn) addBtn.click();
+      });
+    }
+    return;
+  }
+
   currentSkills.forEach((skill, index) => {
     const card = document.createElement('div');
     card.className = 'skill-edit-card';
@@ -214,13 +233,51 @@ function renderSkillsEditor() {
     card.innerHTML = `
       <div class="skill-edit-card-top">
         <div class="skill-meta">
-          <div class="skill-meta-icon"><i class="${escapeHtml(skill.icon)}"></i></div>
-          <span class="skill-meta-title">${escapeHtml(skill.name)}</span>
+          <div class="skill-meta-icon" id="skillIconPreview-${index}"><i class="${escapeHtml(skill.icon || 'fas fa-code')}"></i></div>
+          <div class="skill-title-wrap">
+            <span class="skill-meta-title" id="skillTitlePreview-${index}">${escapeHtml(skill.name || 'Untitled')}</span>
+            <span class="skill-meta-sub">Skill #${index + 1}</span>
+          </div>
         </div>
-        <span class="skill-value-badge" id="valBadge-${index}">${skill.percent}%</span>
+        <div class="skill-header-actions">
+          <span class="skill-value-badge" id="valBadge-${index}">${skill.percent}%</span>
+          <button type="button" class="delete-skill-btn" data-index="${index}" title="Delete this skill" aria-label="Delete skill">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="skill-edit-fields">
+        <div class="skill-field">
+          <label>Skill Name</label>
+          <input 
+            type="text" 
+            class="skill-input" 
+            data-index="${index}" 
+            data-field="name" 
+            value="${escapeHtml(skill.name)}" 
+            placeholder="e.g. TypeScript, React, Docker..." 
+          />
+        </div>
+        <div class="skill-field">
+          <label>Font Awesome Icon Class</label>
+          <input 
+            type="text" 
+            class="skill-input" 
+            data-index="${index}" 
+            data-field="icon" 
+            value="${escapeHtml(skill.icon)}" 
+            placeholder="e.g. fab fa-react, fas fa-database" 
+          />
+          <span class="skill-field-hint">e.g. <code>fab fa-react</code>, <code>fab fa-python</code>, <code>fas fa-database</code></span>
+        </div>
       </div>
 
       <div class="slider-container">
+        <div class="slider-label-row">
+          <label>Proficiency / Mastery</label>
+          <span class="slider-hint">Use slider or buttons to adjust</span>
+        </div>
         <div class="slider-controls-row">
           <button type="button" class="step-btn" data-action="decrement" data-index="${index}" title="Decrease by 5%">-5</button>
           <input 
@@ -250,10 +307,38 @@ function renderSkillsEditor() {
     grid.appendChild(card);
   });
 
-  attachSliderListeners();
+  attachSkillListeners();
 }
 
-function attachSliderListeners() {
+function attachSkillListeners() {
+  // 1. Text input listeners for Name & Icon
+  document.querySelectorAll('.skill-input').forEach(input => {
+    input.addEventListener('input', () => {
+      hasUnsavedChanges = true;
+      updateUnsavedIndicator();
+
+      const idx = Number(input.dataset.index);
+      const field = input.dataset.field;
+      if (currentSkills[idx]) {
+        currentSkills[idx][field] = input.value;
+      }
+
+      if (field === 'name') {
+        const titleEl = document.getElementById(`skillTitlePreview-${idx}`);
+        if (titleEl) titleEl.textContent = input.value || 'Untitled';
+        updateMetrics();
+      }
+
+      if (field === 'icon') {
+        const iconWrap = document.getElementById(`skillIconPreview-${idx}`);
+        if (iconWrap) {
+          iconWrap.innerHTML = `<i class="${escapeHtml(input.value || 'fas fa-code')}"></i>`;
+        }
+      }
+    });
+  });
+
+  // 2. Slider listeners
   const sliders = document.querySelectorAll('.skill-range-slider');
   sliders.forEach(slider => {
     slider.addEventListener('input', (e) => {
@@ -263,7 +348,8 @@ function attachSliderListeners() {
     });
   });
 
-  const stepBtns = document.querySelectorAll('.step-btn');
+  // 3. Step buttons (-5 / +5)
+  const stepBtns = document.querySelectorAll('.skills-editor-grid .step-btn');
   stepBtns.forEach(btn => {
     btn.addEventListener('click', (e) => {
       const idx = Number(btn.dataset.index);
@@ -276,6 +362,34 @@ function attachSliderListeners() {
       if (slider) slider.value = nextVal;
       updateSkillValue(idx, nextVal);
     });
+  });
+
+  // 4. Delete skill buttons (DELETE)
+  document.querySelectorAll('.delete-skill-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      syncSkillFieldsToState();
+      const idx = Number(btn.dataset.index);
+      const skillName = currentSkills[idx] ? currentSkills[idx].name : 'this skill';
+      if (confirm(`Are you sure you want to delete "${skillName}"? This cannot be undone until you save.`)) {
+        currentSkills.splice(idx, 1);
+        hasUnsavedChanges = true;
+        updateUnsavedIndicator();
+        renderSkillsEditor();
+        updateMetrics();
+        showToast('Skill Deleted', `"${skillName}" has been removed. Click Save Changes to persist.`, 'info');
+      }
+    });
+  });
+}
+
+function syncSkillFieldsToState() {
+  document.querySelectorAll('.skill-input').forEach(input => {
+    const idx = Number(input.dataset.index);
+    const field = input.dataset.field;
+    if (currentSkills[idx]) {
+      currentSkills[idx][field] = input.value;
+    }
   });
 }
 
@@ -304,25 +418,29 @@ function updateMetrics() {
   const totalEl = document.getElementById('metricTotalSkills');
   const avgEl = document.getElementById('metricAvgProficiency');
   const topEl = document.getElementById('metricTopSkill');
+  const projectsEl = document.getElementById('metricTotalProjects');
 
-  if (currentSkills.length === 0) return;
+  if (projectsEl) projectsEl.textContent = currentProjects.length;
 
   if (totalEl) totalEl.textContent = currentSkills.length;
 
-  const sum = currentSkills.reduce((acc, s) => acc + Number(s.percent), 0);
+  if (currentSkills.length === 0) {
+    if (avgEl) avgEl.textContent = '0%';
+    if (topEl) topEl.textContent = 'None';
+    return;
+  }
+
+  const sum = currentSkills.reduce((acc, s) => acc + (Number(s.percent) || 0), 0);
   const avg = Math.round(sum / currentSkills.length);
   if (avgEl) avgEl.textContent = `${avg}%`;
 
   let topSkill = currentSkills[0];
   currentSkills.forEach(s => {
-    if (Number(s.percent) > Number(topSkill.percent)) {
+    if ((Number(s.percent) || 0) > (Number(topSkill.percent) || 0)) {
       topSkill = s;
     }
   });
-  if (topEl) topEl.textContent = `${topSkill.name} (${topSkill.percent}%)`;
-
-  const projectsEl = document.getElementById('metricTotalProjects');
-  if (projectsEl) projectsEl.textContent = currentProjects.length;
+  if (topEl) topEl.textContent = `${topSkill.name || 'Skill'} (${topSkill.percent}%)`;
 }
 
 function updateUnsavedIndicator() {
@@ -343,13 +461,22 @@ function initDashboardEvents() {
   const saveBtn = document.getElementById('saveSkillsBtn');
   const stickySaveBtn = document.getElementById('stickySaveBtn');
   const resetBtn = document.getElementById('resetDefaultsBtn');
+  const addSkillBtn = document.getElementById('addSkillBtn');
 
   const handleSave = () => {
     try {
+      syncSkillFieldsToState();
+      currentSkills = currentSkills.map(s => ({
+        name: (s.name || '').trim() || 'Untitled Skill',
+        icon: (s.icon || '').trim() || 'fas fa-code',
+        percent: Math.min(100, Math.max(0, Number(s.percent) || 0))
+      }));
       localStorage.setItem(STORAGE_KEY, JSON.stringify(currentSkills));
       hasUnsavedChanges = false;
       updateUnsavedIndicator();
-      showToast('Changes Saved!', 'Skill percentages updated successfully and synced to your live portfolio.', 'success');
+      renderSkillsEditor();
+      updateMetrics();
+      showToast('Changes Saved!', 'Skills updated successfully and synced to your live portfolio.', 'success');
     } catch (err) {
       console.error('Failed to save to localStorage:', err);
       showToast('Save Error', 'Unable to persist changes to browser storage.', 'error');
@@ -361,7 +488,7 @@ function initDashboardEvents() {
 
   if (resetBtn) {
     resetBtn.addEventListener('click', () => {
-      if (confirm('Are you sure you want to reset all skills back to their default percentages?')) {
+      if (confirm('Are you sure you want to reset all skills back to their default list and percentages?')) {
         currentSkills = JSON.parse(JSON.stringify(DEFAULT_SKILLS));
         localStorage.setItem(STORAGE_KEY, JSON.stringify(currentSkills));
         hasUnsavedChanges = false;
@@ -370,6 +497,44 @@ function initDashboardEvents() {
         updateMetrics();
         showToast('Reset Complete', 'All skills have been restored to their default baseline.', 'info');
       }
+    });
+  }
+
+  // Add New Skill (CREATE)
+  if (addSkillBtn) {
+    addSkillBtn.addEventListener('click', () => {
+      syncSkillFieldsToState();
+      const defaultIconTemplates = [
+        'fab fa-js', 'fab fa-react', 'fab fa-node', 'fab fa-python',
+        'fab fa-docker', 'fas fa-database', 'fab fa-vuejs', 'fab fa-angular',
+        'fab fa-aws', 'fas fa-cloud', 'fas fa-terminal', 'fas fa-code'
+      ];
+      const templateIcon = defaultIconTemplates[currentSkills.length % defaultIconTemplates.length] || 'fas fa-code';
+      const newSkill = {
+        name: 'New Skill',
+        icon: templateIcon,
+        percent: 80
+      };
+      currentSkills.push(newSkill);
+      hasUnsavedChanges = true;
+      updateUnsavedIndicator();
+      renderSkillsEditor();
+      updateMetrics();
+      showToast('Skill Added', 'A new skill card has been created. Customize its details and save.', 'success');
+
+      // Scroll to the new card and focus the name input
+      setTimeout(() => {
+        const grid = document.getElementById('skillsEditorGrid');
+        const lastCard = grid ? grid.lastElementChild : null;
+        if (lastCard) {
+          lastCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          const nameInput = lastCard.querySelector('input[data-field="name"]');
+          if (nameInput) {
+            nameInput.focus();
+            nameInput.select();
+          }
+        }
+      }, 120);
     });
   }
 
